@@ -31,6 +31,7 @@ template<typename T> class Heap
         ~Heap();
         static Heap* build(T *a, int lenght, std::function<bool(T, T)> compare);
         void insert(T a);
+        void build();
         T remove();
         int getSize();
         void sort();
@@ -65,6 +66,14 @@ template<typename T> Heap<T>* Heap<T>::build(T *a, int lenght, std::function<boo
     return heap;
 
 }
+template<typename T> void Heap<T>::build()
+{
+    FUNCTION_ENTRY;
+    for (int i=mHeapSize/2; i>=ROOT; i--)
+        heapify(i);
+    FUNCTION_EXIT;
+
+}
 template<typename T> void Heap<T>::insert(T a)
 {
     FUNCTION_ENTRY;
@@ -73,10 +82,11 @@ template<typename T> void Heap<T>::insert(T a)
     int i = mHeapSize;
     while (i >= ROOT)
     {
-        if (fpCompare(mA[i], mA[PARENT(i)]))
+        int parent = PARENT(i);
+        if (fpCompare(mA[i], mA[parent]))
         {
-            swap(i, PARENT(i));
-            i = PARENT(i);
+            swap(i, parent);
+            i = parent;
         }
         else
         {
@@ -91,8 +101,6 @@ template<typename T> T Heap<T>::remove()
     T item = mA[ROOT];
     if( mHeapSize >= ROOT)
     {
-        std::cout<<"removing:"<<item<<std::endl;
-        print();
         swap(ROOT, mHeapSize);
         mHeapSize--;
         heapify(ROOT);
@@ -114,7 +122,7 @@ template<typename T> void Heap<T>::heapify(int i)
     int largest = i;
     if( l <= mHeapSize && fpCompare(mA[l], mA[i]))
         largest = l;
-    if( l <= mHeapSize && fpCompare(mA[r], mA[largest]))
+    if( r <= mHeapSize && fpCompare(mA[r], mA[largest]))
         largest = r;
     if( largest != i)
     {
@@ -138,7 +146,10 @@ template<typename T> void Heap<T>::sort()
     int length = getSize();
     for(int i= length; i>= 2; i-- )
     {
-        remove();
+        swap(ROOT, i);
+        mHeapSize--;
+        heapify(ROOT);
+       //remove();
     }
     mHeapSize = length;
     FUNCTION_EXIT;
