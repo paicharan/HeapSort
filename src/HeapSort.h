@@ -4,7 +4,7 @@
 #include<iostream>
 #include<functional>
 
-#define ROOT 0
+#define ROOT 1
 #define LEFT(i) (i * 2)
 #define RIGHT(i) ( LEFT(i) + 1 )
 #define PARENT(i) (i / 2)
@@ -122,7 +122,7 @@ template<typename T> void Heap<T>::heapify(int i)
     int largest = i;
     if( l <= mHeapSize && fpCompare(mA[l], mA[i]))
         largest = l;
-    if( l <= mHeapSize && fpCompare(mA[l], mA[largest]))
+    if( l <= mHeapSize && fpCompare(mA[r], mA[largest]))
         largest = r;
     if( largest != i)
     {
