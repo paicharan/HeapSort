@@ -10,7 +10,7 @@
 #define PARENT(i) (i / 2)
 
 //#define DEBUG_V 
-#define DEBUG 
+//#define DEBUG 
 
 #ifdef DEBUG_V
 #define FUNCTION_ENTRY std::cout<<"+++"<<__func__<<"::"<<__LINE__<<std::endl
@@ -33,22 +33,15 @@ template<typename T> class Heap
         void insert(T a);
         T remove();
         int getSize();
-        void setSize(int size);
-        void heapify(int i);
-        void swap(int i, int j);
+        void sort();
+        void print();
     private:
         Heap();
+        void heapify(int i);
+        void swap(int i, int j);
         int mHeapSize;
         T *mA;
         std::function<bool(T,T)> fpCompare;
-};
-
-
-template<typename T> class HeapSort
-{
-    public:
-        static void sort(Heap<T> &heap);
-
 };
 
 template<typename T> Heap<T>::Heap() {
@@ -96,9 +89,14 @@ template<typename T> T Heap<T>::remove()
 {
     FUNCTION_ENTRY;
     T item = mA[ROOT];
-    swap(ROOT, mHeapSize);
-    mHeapSize--;
-    heapify(ROOT);
+    if( mHeapSize >= ROOT)
+    {
+        std::cout<<"removing:"<<item<<std::endl;
+        print();
+        swap(ROOT, mHeapSize);
+        mHeapSize--;
+        heapify(ROOT);
+    }
     FUNCTION_EXIT;
     return item;
 }
@@ -107,12 +105,6 @@ template<typename T> int Heap<T>::getSize()
     FUNCTION_ENTRY;
     FUNCTION_EXIT;
     return mHeapSize;
-}
-template<typename T> void Heap<T>::setSize(int size)
-{
-    FUNCTION_ENTRY;
-    mHeapSize = size;
-    FUNCTION_EXIT;
 }
 template<typename T> void Heap<T>::heapify(int i)
 {
@@ -135,22 +127,27 @@ template<typename T> void Heap<T>::heapify(int i)
 template<typename T> void Heap<T>::swap(int i, int j)
 {
     FUNCTION_ENTRY;
-        T temp = mA[i];
-        mA[i] = mA[j];
-        mA[j] = temp;
+    T temp = mA[i];
+    mA[i] = mA[j];
+    mA[j] = temp;
     FUNCTION_EXIT;
 }
-template<typename T> void HeapSort<T>::sort(Heap<T> &heap)
+template<typename T> void Heap<T>::sort()
 {
     FUNCTION_ENTRY;
-    int length = heap.getSize();
-    for(int i= length; i>= 2; )
+    int length = getSize();
+    for(int i= length; i>= 2; i-- )
     {
-        heap.swap(ROOT, i);
-        heap.setSize(length - 1);
-        heap.heapify(ROOT);
+        remove();
     }
+    mHeapSize = length;
     FUNCTION_EXIT;
+}
+template<typename T> void Heap<T>::print()
+{
+    for(int i=ROOT; i<=mHeapSize; i++)
+        std::cout<<mA[i]<<std::endl;
+    std::cout<<std::endl;
 }
 #endif
 

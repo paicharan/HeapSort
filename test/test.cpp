@@ -1,16 +1,21 @@
 #include "HeapSort.h"
-
+#include <stdlib.h>
 int main()
 {
     int *array = new int[100000];
-    for(int i=0; i < 100000; i++)
-        array[i] = 100000-i;
-    Heap<int> *heap = Heap<int>::build(array, 9999, [] (int a, int b) { return a < b; });
-    for(int i =1; i< 10000; i++)
+    for(int i=1; i <=10; i++)
+        array[i] =  (rand()%1000);
+    std::cout<<"before build"<<std::endl;
+    for(int i =1; i<=10; i++)
         std::cout<<array[i]<<std::endl;
-    HeapSort<int>::sort(*heap);
+    Heap<int> *heap = Heap<int>::build(array, 10, [] (int a, int b) {  return a > b; });
+    std::cout<<"after build"<<std::endl;
+    for(int i =1; i<=10; i++)
+        std::cout<<array[i]<<std::endl;
+    std::cout<<"before sort\n"<<std::endl;
+    heap->sort();
     std::cout<<"after sort"<<std::endl;
-    for(int i =0; i< 10; i++)
+    for(int i =1; i<=10; i++)
         std::cout<<array[i]<<std::endl;
     return 0;
 }
